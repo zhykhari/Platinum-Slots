@@ -1,0 +1,73 @@
+workflows:
+  ios-workflow:
+    name: Unity iOS Workflow
+    environment:
+      xcode: 14.3
+    
+      ios_signing:
+        provisioning_profiles:
+          - profile: AnsP
+            environment_variable: ~/Library/MobileDevice/Provisioning Profiles/
+          - profile: AnsNP
+            environment_variable: ~/Library/MobileDevice/Provisioning Profiles/
+          - profile: AnsUP
+            environment_variable: ~/Library/MobileDevice/Provisioning Profiles/
+
+      groups:
+        - default
+      vars:
+        BUNDLE_ID: "com.app.slotsgold"
+        XCODE_WORK: "slotsgold.xcodeproj"
+        XCODE_SCHEME: "slotsgold"
+
+    scripts:
+      - name: X
+        script: |
+          xcodebuild clean -project Unity-iPhone.xcodeproj -scheme UnityFramework -configuration Release
+          xcodebuild clean -project Unity-iPhone.xcodeproj -scheme Unity-iPhone -configuration Release
+          xcodebuild clean -project slotsgold.xcodeproj -scheme slotsgold -configuration Release
+      
+      - name: Delete derived data
+        script: rm -rf ~/Library/Developer/Xcode/DerivedData
+      
+     - name: Activate Unity license
+      script: #...
+    - name: Generate the Xcode project from Unity
+      script: | 
+        $UNITY_BIN -batchmode \
+          -quit \
+          -logFile \
+          -projectPath . \
+          -executeMethod BuildScript.BuildIos \
+          -nographics
+    - name: Set up code signing settings on Xcode project
+      script: | 
+        xcode-project use-profiles
+    - name: Set the build number
+      script: #...
+    - name: Build the project
+      script: | 
+        xcode-project build-ipa --project "$UNITY_IOS_DIR/$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+            
+    artifacts:
+      - ios_distribution.key
+      - ios_distribution.csr
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: false
+        expire_build_submitted_for_review: true
+
+        beta_groups:
+          - test 1
+          - test 2
+
+        submit_to_app_store: true
+        #cancel_previous_submissions: true
+        release_type: MANUAL
