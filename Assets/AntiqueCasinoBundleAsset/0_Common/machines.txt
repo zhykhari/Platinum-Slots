@@ -1,0 +1,40 @@
+	Egypt:
+Egypt horizontal:
+01h_Egypt_3x5_W20_EW
+02h_Egypt_3x5_W243_EW
+03h_Egypt_3x5_W20_HEW
+04h_Egypt_3x3_W20_HEW
+05h_Egypt_3x5_W20_H
+06h_Egypt_3x5_CW243_EW
+07h_Egypt_3x5_CW243_EWMS
+
+Egypt vertical:
+01v_Egypt_3x5_W20_EW
+02v_Egypt_3x3_W20_EW
+
+
+	China:
+China horizontal:
+01h_China_3x5_W20
+02h_China_3x5_W243
+03h_China_3x3_W20_H
+
+China vertical:
+01v_China_3x5_W243
+
+
+	Greek
+Greek horizontal:
+01h_Greek_3x5_W20_H
+02h_Greek_3x5_W243
+
+Greek vertical:
+01v_Greek_3x5_W243
+
+	Viking
+Viking horizontal:
+01h_Viking_3x5_W20_H
+02h_Viking_3X5_W243
+
+Viking vertical:
+01v_Viking_3X5_W243
